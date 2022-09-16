@@ -1,0 +1,72 @@
+package ${package}.${moduleName}.service;
+
+import com.easy.city.common.core.pagination.Page;
+import com.easy.city.common.core.pagination.OrderItem;
+import ${package}.${moduleName}.entity.${className};
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${className}Service {
+    /**
+         * 自定义insert
+         * @param model 实体对象
+         * @return
+         */
+    boolean insert(${className} model);
+    /**
+         * batch insert
+         * @param model 实体对象
+         * @return
+         */
+    boolean batchInsert(List<${className}> model);
+    /**
+         * 自定义更新
+         * @param model 实体对象
+         * @return
+         */
+    boolean update(${className} model);
+
+    /**
+    * 根据id删除
+    * @param id
+    * @return
+    */
+    boolean removeById(Long id);
+    /**
+     * 查询符合条件的对象
+     *
+     * @param model 实体对象
+     * @return
+     */
+        ${className} getModel(${className} model);
+    /**
+     * 自定义统计符合条件记录数
+     *
+     * @param model 实体对象
+     * @return
+     */
+    Integer getCount(${className} model);
+    /**
+     * 自定义分页
+     *
+     * @param page 分页对象
+     * @param model 实体对象
+     * @return
+     */
+    Page<${className}> getPage(Page page, ${className} model);
+
+    /**
+     * 查询符合条件的全部数据
+     *
+     * @param orders 排序list
+     * @param model 实体对象
+     * @param limit 取?条
+     * @return
+     */
+    List<${className}> getList(List<OrderItem> orders, ${className} model,Integer limit);
+}

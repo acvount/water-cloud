@@ -1,0 +1,13 @@
+-- 该脚本不要执行，请完善 ID 对应关系,注意层级关系 !!!!
+
+-- 菜单SQL
+insert into `sys_menu` ( `pid`, `name`, `permission`, `uri`, `menu`, `sort_id`)
+    values ( '父菜单ID','${comments}管理','${moduleName}_${pathName}_select', 'views/${moduleName}/${pathName}/index',1,20);
+
+-- 菜单对应按钮SQL
+insert into `sys_menu` ( `pid`, `name`, `permission`, `uri`, `menu`, `sort_id`)
+    values ( '菜单ID', '${comments}新增', '${moduleName}_${pathName}_add','',0,40);
+insert into `sys_menu` ( `pid`, `name`, `permission`, `uri`, `menu`, `sort_id`)
+    values ( '菜单ID', '${comments}修改', '${moduleName}_${pathName}_edit', '',0,60);
+insert into `sys_menu` ( `pid`, `name`, `permission`, `uri`, `menu`, `sort_id`)
+    values ( '菜单ID', '${comments}删除', '${moduleName}_${pathName}_del','', 0,80);

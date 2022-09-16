@@ -1,0 +1,78 @@
+
+package ${package}.${moduleName}.mapper;
+
+import com.easy.city.common.core.pagination.Page;
+import com.easy.city.common.core.pagination.OrderItem;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import ${package}.${moduleName}.entity.${className};
+import java.lang.Integer;
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Mapper
+public interface ${className}Mapper {
+    /**
+     * 自定义insert
+     * @param model 实体对象
+     * @return
+     */
+    Integer insert(@Param("ew") ${className} model);
+    /**
+     * batch insert
+     * @param model 实体对象
+     * @return
+     */
+    Integer batchInsert(@Param("list") List<${className}> model);
+    /**
+     * 自定义更新
+     * @param model 实体对象
+     * @return
+     */
+    Integer update(@Param("ew") ${className} model);
+
+    /**
+    * 根据id删除
+    * @param id
+    * @return
+    */
+    Integer removeById(@Param("id") Long id);
+    /**
+     * 查询符合条件的对象
+     *
+     * @param model 实体对象
+     * @return
+     */
+    ${className} getModel(@Param("ew") ${className} model);
+    /**
+     * 自定义统计符合条件记录数
+     *
+     * @param model 实体对象
+     * @return
+     */
+    Integer getCount(@Param("ew") ${className} model);
+
+    /**
+     * 自定义分页
+     *
+     * @param page 分页对象
+     * @param model 实体对象
+     * @return
+     */
+    List<${className}> getPage(@Param("page") Page page, @Param("ew") ${className} model);
+
+    /**
+     * 查询符合条件的全部数据
+     *
+     * @param orders 排序list
+     * @param model 实体对象
+     * @param limit 取?条
+     * @return
+     */
+    List<${className}> getList(@Param("orders") List<OrderItem> orders, @Param("ew") ${className} model,@Param("limit") Integer limit);
+}

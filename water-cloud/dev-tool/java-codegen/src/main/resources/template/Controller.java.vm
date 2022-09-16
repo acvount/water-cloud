@@ -1,0 +1,87 @@
+package ${package}.${moduleName}.controller;
+
+import com.easy.city.common.core.pagination.Page;
+import com.easy.city.common.core.util.R;
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.${moduleName}.group.${className}Group;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import lombok.RequiredArgsConstructor;
+import javax.validation.Valid;
+
+
+/**
+ * ${comments}
+ *
+ * @authoReturnRep ${author}
+ * @date ${datetime}
+ */
+@RestController
+@RequestMapping("/${moduleName}/${pathName}")
+@Api(value = "${pathName}", tags = "${comments}相关API")
+@RequiredArgsConstructor
+public class ${className}Controller {
+
+    private final ${className}Service ${classname}Service;
+
+    /**
+     * 分页查询
+     * @param page 分页对象
+     * @param ${classname} ${comments}
+     * @return R
+     */
+    @PostMapping("/page")
+    @ApiOperation(value = "分页接口", notes = "Content-Type=application/x-www-form-urlencoded")
+    public R get${className}Page(Page page, ${className} ${classname}) {
+        return R.ok(${classname}Service.getPage(page, ${classname}));
+    }
+
+
+    /**
+     * 通过id查询${comments}
+     * @param ${classname} ${comments}
+     * @return R
+     */
+    @PostMapping("/get-model")
+    @ApiOperation(value = "获得对象", notes = "Content-Type=application/json")
+    public R getModel(@RequestBody ${className} ${classname}) {
+        return R.ok(${classname}Service.getModel(${classname}));
+    }
+
+    /**
+     * 新增${comments}
+     * @param ${classname} ${comments}
+     * @return R
+     */
+    @PostMapping(value = "/save")
+    @ApiOperation(value = "insert对象", notes = "Content-Type=application/json")
+    public R insert(@RequestBody @Validated(${className}Group.Add.class) @Valid ${className} ${classname}) {
+        return R.ok(${classname}Service.insert(${classname}));
+    }
+
+    /**
+     * 修改${comments}
+     * @param ${classname} ${comments}
+     * @return R
+     */
+    @PostMapping(value = "/edit")
+    @ApiOperation(value = "edit对象", notes = "Content-Type=application/json")
+    public R edit(@RequestBody @Validated(${className}Group.Edit.class) @Valid ${className} ${classname}) {
+        return R.ok(${classname}Service.update(${classname}));
+    }
+
+    /**
+     * 通过id删除${comments}
+     * @param ${classname} ${comments}
+     * @return R
+     */
+    @PostMapping(value = "/remove")
+    @ApiOperation(value = "del对象", notes = "Content-Type=application/json")
+    public R removeById(@RequestBody @Validated(${className}Group.Del.class) @Valid ${className} ${classname}) {
+        return R.ok(${classname}Service.removeById(${classname}.getId()));
+    }
+
+}

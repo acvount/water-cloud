@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${package}.${moduleName}.mapper.${className}Mapper">
+
+    <resultMap id="${classname}Map" type="${package}.${moduleName}.entity.${className}">
+        #foreach($column in $columns)
+            #if($column.lowerAttrName==$pk.lowerAttrName)
+                <id property="${pk.lowerAttrName}" column="${pk.columnName}"/>
+            #else
+                <result property="${column.lowerAttrName}" column="${column.columnName}"/>
+            #end
+        #end
+    </resultMap>
+    <sql id="${classname}Sql">
+    #foreach($column in $columns)
+      a.`${column.columnName}` AS '${column.columnName}'
+        #if($foreach.hasNext),#end
+    #end
+    </sql>
+    <sql id="joinSql"></sql>
+    <sql id="joinTable"></sql>
+    <sql id="${classname}Where">
+        <where>
+            #foreach($column in $columns)
+                <if test="null != ew.${column.lowerAttrName}#if($column.attrType==
+                    "String") and '' != ew.${column.lowerAttrName}#end">
+                    AND a.`${column.columnName}` = #{ew.${column.lowerAttrName}}
+                </if>
+            #end
+        </where>
+    </sql>
+    <!--返回自增的主键id-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `${tableName}` SET
+        <trim suffixOverrides=",">
+        #foreach($column in $columns)
+            <if test="null != ew.${column.lowerAttrName}#if($column.attrType=="String") and '' != ew.${column.lowerAttrName}#end">
+                `${column.columnName}` = #{ew.${column.lowerAttrName}},
+            </if>
+        #end
+        </trim>
+    </insert>
+
+    <update id="update">
+        UPDATE `${tableName}` SET
+        <trim suffixOverrides=",">
+            #foreach($column in $columns)
+                <if test="null != ew.${column.lowerAttrName}#if($column.attrType=="String") and '' != ew.${column.lowerAttrName}#end">
+                    `${column.columnName}` = #{ew.${column.lowerAttrName}},
+                </if>
+            #end
+        </trim>
+        <where>
+            `${pk.columnName}` = #{ew.id}
+        </where>
+    </update>
+
+    <delete id="removeById">
+        DELETE FROM `${tableName}`
+        <where>
+            `${pk.columnName}` = #{id}
+        </where>
+    </delete>
+
+    <!--查询符合条件的对象-->
+    <select id="getModel" resultMap="${classname}Map">
+        SELECT
+        <include refid="${classname}Sql"></include>
+        <include refid="joinSql"></include>
+        FROM `${tableName}` AS a
+        <include refid="joinTable"></include>
+        <include refid="${classname}Where"></include>
+        <!--LIMIT 1-->
+    </select>
+    <!--查询符合条件的记录数-->
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM `${tableName}` AS a
+        <include refid="${classname}Where"></include>
+    </select>
+    <!--自定义分页-->
+    <select id="getPage" resultMap="${classname}Map">
+        SELECT
+        <include refid="${classname}Sql"></include>
+        <include refid="joinSql"></include>
+        FROM `${tableName}` AS a
+        <include refid="joinTable"></include>
+        <include refid="${classname}Where"></include>
+        <if test="null != page">
+            <if test="null != page.orders and page.orders.size &gt; 0">
+                ORDER BY
+                <foreach collection="page.orders" item="order" open="" separator="," close="">
+                    a.${order.column}&#x0020;
+                    <choose>
+                        <when test="'true'.toString() == order.asc.toString()">
+                            ASC
+                        </when>
+                        <otherwise>
+                            DESC
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </if>
+            LIMIT #{page.offSet},#{page.size}
+        </if>
+    </select>
+    <!--查询符合条件的全部数据-->
+    <select id="getList" resultMap="${classname}Map">
+        SELECT
+        <include refid="${classname}Sql"></include>
+        <include refid="joinSql"></include>
+        FROM `${tableName}` AS a
+        <include refid="joinTable"></include>
+        <include refid="${classname}Where"></include>
+        <!--排序-->
+        <if test="null != orders and orders.size &gt; 0">
+            ORDER BY
+            <foreach collection="orders" item="order" open="" separator="," close="">
+                a.${order.column}&#x0020;
+                <choose>
+                    <when test="'true'.toString() == order.asc.toString()">
+                        ASC
+                    </when>
+                    <otherwise>
+                        DESC
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+        <if test="null != limit and limit &gt; 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `${tableName}`
+        (
+        #foreach($column in $columns)
+                `${column.columnName}`
+            #if($foreach.hasNext)
+            ,
+            #end
+        #end
+        )
+        VALUES
+
+            <foreach collection="list" item="item" index="index" separator=",">
+                (
+                #foreach($column in $columns)
+                    #{item.${column.lowerAttrName}}
+                    #if($foreach.hasNext)
+                        ,
+                    #end
+                #end
+                )
+            </foreach>
+
+
+    </insert>
+</mapper>

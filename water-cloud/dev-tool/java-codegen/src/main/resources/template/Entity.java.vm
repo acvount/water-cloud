@@ -1,0 +1,46 @@
+package ${package}.entity.${moduleName};
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import ${package}.${moduleName}.group.${className}Group;
+import java.io.Serializable;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+import java.time.LocalDateTime;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Getter
+@Setter
+@ApiModel(value="${comments}类",description="${comments}")
+@TableName("${tableName}")
+public class ${className} implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  #foreach ($column in $columns)
+  /**
+     * $column.comments
+     */
+  #if($column.columnName == "delete_flag")
+  //@TableLogic
+  #end
+  #if($column.columnName == "id")
+@NotNull(groups = {${className}Group.Edit.class,${className}Group.Del.class},message = "id必填")
+    @Min(value = 1,groups = {${className}Group.Edit.class,${className}Group.Del.class},message = "id必须大于0")
+  #end
+@ApiModelProperty(example = "$column.columnDefault", notes = "$column.comments")
+    private $column.attrType $column.lowerAttrName;
+
+  #end
+
+}

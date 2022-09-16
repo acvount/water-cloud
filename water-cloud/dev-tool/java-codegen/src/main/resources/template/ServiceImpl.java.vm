@@ -1,0 +1,131 @@
+package ${package}.${moduleName}.serviceimpl;
+
+import com.easy.city.common.core.pagination.Page;
+import com.easy.city.common.core.pagination.OrderItem;
+import com.easy.city.common.core.helper.SqlHelper;
+import com.easy.city.web.tsc.config.aop.param.EditHandleField;
+import com.easy.city.web.tsc.config.aop.param.HandleField;
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import com.easy.city.web.tsc.utils.*;
+import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class ${className}ServiceImpl implements ${className}Service {
+
+    private final ${className}Mapper ${classname}Mapper;
+
+    /**
+     * 自定义insert
+     * @param model 实体对象
+     * @return
+     */
+    @HandleField
+    @EditHandleField
+    @Transactional(rollbackFor = Exception.class)
+    public boolean insert(${className} model) {
+        model.setId(IdWorkerUtil.getId());
+        return SqlHelper.retBool(${classname}Mapper.insert(model));
+    }
+
+    /**
+     * batch insert
+     * @param model 实体对象
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchInsert(List<${className}> model) {
+        model.forEach(item->{
+            item.setId(IdWorkerUtil.getId());
+            item.setCompanyId(UserUtil.getCurrentLoginUserCompanyID());
+        });
+        return SqlHelper.retBool(${classname}Mapper.batchInsert(model));
+    }
+
+    /**
+         * 自定义更新
+         * @param model 实体对象
+         * @return
+         */
+    @HandleField
+    @EditHandleField(funName = "update")
+    @Transactional(rollbackFor = Exception.class)
+    public boolean update(${className} model) {
+        return SqlHelper.retBool(${classname}Mapper.update(model));
+    }
+
+    /**
+   * 根据id删除
+   * @param id
+   * @return
+   */
+    @HandleField
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeById(Long id) {
+        return SqlHelper.retBool(${classname}Mapper.removeById(id));
+    }
+
+    /**
+     * 查询符合条件的对象
+     *
+     * @param model 实体对象
+     * @return
+     */
+    @HandleField
+    public ${className} getModel(${className} model) {
+        return ${classname}Mapper.getModel(model);
+    }
+
+    /**
+     * 自定义统计符合条件记录数
+     *
+     * @param model 实体对象
+     * @return
+     */
+    @HandleField
+    public Integer getCount(${className} model) {
+        return ${classname}Mapper.getCount(model);
+    }
+
+    /**
+         * rpc 自定义分页
+         * @param page
+         * @param model
+         * @return
+         */
+    @HandleField
+    public Page<${className}> getPage(Page page, ${className} model) {
+        page.setTotal(${classname}Mapper.getCount(model));
+        if (page.getTotal() > 0) {
+            page.setRecords(${classname}Mapper.getPage(page, model));
+        }
+        return page;
+    }
+
+    /**
+     * 查询符合条件的全部数据
+     *
+     * @param orders 排序list
+     * @param model 实体对象
+     * @param limit 取?条
+     * @return
+     */
+    @HandleField
+    public List<${className}> getList(List<OrderItem> orders, ${className} model, Integer limit) {
+        return ${classname}Mapper.getList(orders, model, limit);
+    }
+}

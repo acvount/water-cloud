@@ -1,0 +1,37 @@
+package ${package}.entity.${moduleName};
+
+
+/**
+* ${comments}
+*
+* @author ${author}
+* @date ${datetime}
+*/
+public class ${className}Group{
+    /**
+    * 新增数据校验分组
+    */
+    public interface Add {
+    }
+
+    /**
+    * 删除数据校验组
+    */
+    public interface Del{
+
+    }
+
+    /**
+    * 修改数据校验分组
+    */
+    public interface Edit {
+    }
+
+    /**
+    * select数据
+    */
+    public interface Select{
+
+    }
+
+}

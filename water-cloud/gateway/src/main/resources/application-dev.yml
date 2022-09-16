@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+swagger:
+  service: user-service,equipment-service,oss-service
+
+spring:
+  application:
+    name: gateway
+  main:
+    allow-bean-definition-overriding: true
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    gateway:
+      # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      routes:
+        # 当前路由的标识, 要求唯一
+        - id: user-service
+          # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+          uri: lb://user-consumer
+          # 断言(就是路由转发要满足的条件)
+          predicates:
+            # 当请求路径满足Path指定的规则时,才进行路由转发
+            - Path=/user-service/**
+          # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+          filters:
+            # 转发之前去掉1层路径
+            - StripPrefix=1
+        - id: equipment-service
+          uri: lb://equipment-consumer
+          predicates:
+            - Path=/equipment-service/**
+          filters:
+            - StripPrefix=1
+        - id: oss-service
+          uri: lb://oss-consumer
+          predicates:
+            - Path=/oss-service/**
+          filters:
+            - StripPrefix=1
+      discovery:
+        locator:
+          enabled: true
+

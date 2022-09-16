@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.alsocity.common.core.config.JacksonConfiguration,\
+  com.alsocity.common.core.config.DateFormatConfig,\
+  com.alsocity.common.core.config.WebMvcConfiguration,\
+  com.alsocity.common.core.config.ExceptionHandle

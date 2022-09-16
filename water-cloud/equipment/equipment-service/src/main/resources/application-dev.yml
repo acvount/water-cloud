@@ -1,0 +1,86 @@
+server:
+  port: 8002
+
+swagger:
+  enabled: true
+
+storage:
+  equipment:
+    param:
+      path: /water-manager/
+
+spring:
+  application:
+    name: equipment-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-2zeeh682k7f1q79qwno.mysql.rds.aliyuncs.com/water_db?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: zifan_rds
+    password: acfan0523@gmail
+
+dubbo:
+  cloud:
+    subscribed-services: 'gateway-service'
+
+  consumer:
+    check: off
+    timeout: 30000
+
+  application:
+    name: equipment-service  # 应用名称,必填
+    qos-enable: false
+
+  registry:
+    address: nacos://127.0.0.1:8848 # 注册中心服务器地址,集群以逗号分隔
+
+  protocol:
+    name: dubbo # 协议名称，必填
+    port: -1 # 协议缺省端口,dubbo默认端口为20880,未配置则为默认端口
+  provider:
+    threadpool: fixed # 线程池类型,fixed/cache,默认fixed
+    threads: 200 # 服务线程池大小，默认200
+    payload: 8388608  # 请求或响应的数据包大小,单位字节,默认8M(8388608=8M)
+    #    filter: -exception # 服务提供方远程调用过程拦截器名称，多个名称用逗号分隔
+    accepts: 1000 # 服务提供者最大可接受连接数
+    delay: -1 # 延迟注册服务时间(毫秒)- ，设为-1时，表示延迟到Spring容器初始化完成时暴露服务
+    timeout: 30000 # 远程服务调用超时时间(毫秒),默认1000
+    retries: 0 # 远程服务调用重试次数，不包括第一次调用，不需要重试请设为0,默认为2
+    connections: 100 # 对每个提供者的最大连接数
+    loadbalance: random # 负载均衡策略，可选值：random,roundrobin,leastactive，分别表示：随机，轮询，最少活跃调用
+    weight: 10 # 服务权重
+    executes: 100 # 服务提供者每服务每方法最大可并行执行请求数
+    actives: 100 # 每服务消费者每服务每方法最大并发调用数
+    charset: UTF-8 # 序列化编码
+    buffer: 8192 # 网络读写缓冲区大小
+
+mybatis-plus:
+  configuration:
+    #    下划线转驼峰
+    map-underscore-to-camel-case: true
+    #    不启用缓存
+    cache-enabled: false
+
+  global-config:
+    db-config:
+      #      没删除为0
+      logic-not-delete-value: 0
+      #      删除为1
+      logic-delete-value: 1
+      #自增ID
+      id-type: auto
+
+mqtt:
+  host: tcp://8.140.155.54:1883
+  userName: acfan01
+  passWord: acfan0523
+  qos: 1
+  clientId: ClientId_local
+  timeout: 10
+  keepalive: 20
+  topic1: Acfan
